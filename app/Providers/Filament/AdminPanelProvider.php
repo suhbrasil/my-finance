@@ -3,13 +3,13 @@
 namespace App\Providers\Filament;
 
 use Filament\Http\Middleware\Authenticate;
+use App\Filament\Clusters\ProducerProfile\Pages\ViewProfile;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Support\Colors\Color;
-use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -26,7 +26,9 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->registration()
             ->login()
+            ->favicon('images/image.png')
             ->colors([
                 'primary' => '#e879f9',
             ])
@@ -35,10 +37,16 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
+            // ->userMenuItems([
+            //     'profile' => MenuItem::make()
+            //         ->label('Meu Perfil')
+            //         ->icon('heroicon-o-user')
+            //         ->url(fn (): string => ViewProfile::getUrl()),
+            // ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                // Widgets\AccountWidget::class,
+                // Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

@@ -16,7 +16,8 @@ class Release extends Model
         'description',
         'lung_id',
         'account_id',
-        'value'
+        'value',
+        'deposit'
     ];
 
     public function category(): BelongsTo

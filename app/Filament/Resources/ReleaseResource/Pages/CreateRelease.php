@@ -9,4 +9,14 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateRelease extends CreateRecord
 {
     protected static string $resource = ReleaseResource::class;
+
+    public function getHeading(): string
+    {
+        return __('Criar Lançamento');
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }
