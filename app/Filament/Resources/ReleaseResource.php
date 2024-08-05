@@ -3,6 +3,8 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ReleaseResource\Pages;
+use App\Models\Category;
+use App\Models\Lung;
 use App\Models\Release;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Actions\Action;
@@ -12,6 +14,8 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Illuminate\Support\Facades\DB;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -31,11 +35,19 @@ class ReleaseResource extends Resource
         return $form
             ->schema([
                 DatePicker::make('date')->label('Data')->required()->native(false),
-                Select::make('category_id')->label('Categoria')->required()
+                Select::make('category_id')->label('Categoria')->required()->reactive()
                     ->relationship('category', 'name'),
                 TextInput::make('description')->label('Descrição'),
                 Select::make('lung_id')->label('Pulmão')->required()
-                    ->relationship('lung', 'name'),
+                    ->relationship('lung', 'name')
+                    ->options(function (callable $get) {
+                        $categoryId = $get('category_id');
+                        if ($categoryId) {
+                            $category = DB::table('categories')->where('id', $categoryId)->first();
+                            return DB::table('lungs')->where('id', $category->lung_id)->pluck('name', 'id');
+                        }
+                        return [];
+                    }),
                 Select::make('account_id')->label('Conta de Entrada/Saída')->required()
                     ->relationship('account', 'name'),
                 Money::make('value')->label('Valor')->required(),

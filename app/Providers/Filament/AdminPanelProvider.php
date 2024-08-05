@@ -27,6 +27,13 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->registration()
+            ->profile()
+            ->userMenuItems([
+                'profile' => MenuItem::make()
+                    ->label('Meu Perfil')
+                    ->icon('heroicon-o-user')
+            ])
+            ->breadcrumbs(false)
             ->login()
             ->favicon('images/image.png')
             ->colors([

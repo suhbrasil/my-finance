@@ -19,11 +19,19 @@ return new class extends Migration
         });
 
         Lung::create([
-            'name' => 'Entradas',
-            'name' => 'Despesas Fixas',
-            'name' => 'Despesas Eventuais',
-            'name' => 'Lazer',
             'name' => 'Investimentos',
+        ]);
+        Lung::create([
+            'name' => 'Entradas',
+        ]);
+        Lung::create([
+            'name' => 'Despesas Fixas',
+        ]);
+        Lung::create([
+            'name' => 'Despesas Eventuais',
+        ]);
+        Lung::create([
+            'name' => 'Lazer',
         ]);
     }
 
