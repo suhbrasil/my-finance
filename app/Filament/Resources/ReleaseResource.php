@@ -3,30 +3,34 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ReleaseResource\Pages;
-use App\Filament\Resources\ReleaseResource\RelationManagers;
 use App\Models\Release;
-use Filament\Forms;
+use Illuminate\Database\Eloquent\Model;
+use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Leandrocfe\FilamentPtbrFormFields\Money;
 
 class ReleaseResource extends Resource
 {
     protected static ?string $model = Release::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
+
+    protected static ?string $modelLabel = 'Lançamentos';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                DatePicker::make('date')->label('Data')->required(),
+                DatePicker::make('date')->label('Data')->required()->native(false),
                 Select::make('category_id')->label('Categoria')->required()
                     ->relationship('category', 'name'),
                 TextInput::make('description')->label('Descrição'),
@@ -34,7 +38,17 @@ class ReleaseResource extends Resource
                     ->relationship('lung', 'name'),
                 Select::make('account_id')->label('Conta de Entrada/Saída')->required()
                     ->relationship('account', 'name'),
-                TextInput::make('value')->numeric(true)->label('Valor')->required(),
+                Money::make('value')->label('Valor')->required(),
+                Radio::make('deposit')
+                    ->label('Tipo de lançamento')
+                    ->boolean()
+                    ->options([
+                        1 => 'Entrada',
+                        0 => 'Saída',
+                    ])
+                    ->inline()
+                    ->inlineLabel(false)
+                    ->required(),
             ]);
     }
 
@@ -42,18 +56,69 @@ class ReleaseResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('date')->label('Data')->dateTime('d/m/Y'),
+                TextColumn::make('category.name')->label('Categoria'),
+                TextColumn::make('description')->label('Descrição'),
+                TextColumn::make('lung.name')->label('Pulmão'),
+                TextColumn::make('account.name')->label('Conta'),
+                TextColumn::make('value')->label('Valor')
+                    ->formatStateUsing(function (string $state, $record) {
+                        if ($record->deposit)
+                            return 'R$ ' . number_format(($state), 2, ',', '.');
+                        return '- R$ ' . number_format(($state), 2, ',', '.');
+                    }),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Action::make('edit')
+                    ->label(false)
+                    ->tooltip('Editar')
+                    ->modalHeading('Editar Lançamento')
+                    ->modalWidth('2xl')
+                    ->iconButton()
+                    ->icon('heroicon-o-pencil-square')
+                    ->fillForm(fn (Model $record): array => [
+                        'date' => $record->date,
+                        'category_id' => $record->category_id,
+                        'description' => $record->description,
+                        'lung_id' => $record->lung_id,
+                        'account_id' => $record->account_id,
+                        'value' => $record->value,
+                        'deposit' => $record->deposit,
+                    ])
+                    ->form([
+                        DatePicker::make('date')->label('Data')->required()->native(false),
+                        Select::make('category_id')->label('Categoria')->required()
+                            ->relationship('category', 'name'),
+                        TextInput::make('description')->label('Descrição'),
+                        Select::make('lung_id')->label('Pulmão')->required()
+                            ->relationship('lung', 'name'),
+                        Select::make('account_id')->label('Conta de Entrada/Saída')->required()
+                            ->relationship('account', 'name'),
+                        Money::make('value')->label('Valor')->required(),
+                        Radio::make('deposit')
+                            ->label('Tipo de lançamento')
+                            ->boolean()
+                            ->options([
+                                1 => 'Entrada',
+                                0 => 'Saída',
+                            ])
+                            ->inline()
+                            ->inlineLabel(false)
+                            ->required(),
+                    ])
+                    ->action(function (Model $record, array $data): Model {
+                        $record->update($data);
+                        return $record;
+                    }),
+                Tables\Actions\DeleteAction::make()->iconButton()->modalHeading('Excluir Lançamento'),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ]);
     }
 

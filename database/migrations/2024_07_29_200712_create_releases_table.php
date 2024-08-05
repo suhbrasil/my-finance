@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('account_id')->constrained('accounts');
             $table->float('value');
             $table->date('date');
+            $table->boolean('deposit');
             $table->timestamps();
         });
     }
