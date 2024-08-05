@@ -21,7 +21,7 @@ class AccountResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
-    protected static ?string $modelLabel = 'Contas';
+    protected static ?string $modelLabel = 'Conta';
 
     public static function form(Form $form): Form
     {
