@@ -66,7 +66,7 @@ class CategoryResource extends Resource
                         $record->update($data);
                         return $record;
                     }),
-                Tables\Actions\DeleteAction::make()->iconButton()->modalHeading('Excluir Categoria'),
+                Tables\Actions\DeleteAction::make()->iconButton()->modalHeading('Excluir Categoria')->label(false)->tooltip('Excluir'),
             ])
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([

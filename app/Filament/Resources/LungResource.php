@@ -62,13 +62,14 @@ class LungResource extends Resource
                         return $record;
                     })
                     ->hidden(fn ($record) => $record->name == 'Investimentos'),
-                Tables\Actions\DeleteAction::make()->iconButton()->modalHeading('Excluir Pulmão')->hidden(fn ($record) => $record->name == 'Investimentos'),
+                Tables\Actions\DeleteAction::make()
+                    ->label(false)
+                    ->tooltip('Excluir')
+                    ->iconButton()
+                    ->modalHeading('Excluir Pulmão')
+                    ->hidden(fn ($record) => $record->name == 'Investimentos'),
             ])
-            ->bulkActions([
-                // Tables\Actions\BulkActionGroup::make([
-                    // Tables\Actions\DeleteBulkAction::make(),
-                // ]),
-            ]);
+            ->bulkActions([]);
     }
 
     public static function getRelations(): array

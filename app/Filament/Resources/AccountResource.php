@@ -23,7 +23,7 @@ class AccountResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
-    protected static ?string $modelLabel = 'Conta';
+    protected static ?string $modelLabel = 'Pagamento';
 
     public static function form(Form $form): Form
     {
@@ -37,7 +37,7 @@ class AccountResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->label('Conta'),
+                TextColumn::make('name')->label('Conta de Entrada/Saída'),
             ])
             ->filters([
                 //
@@ -46,7 +46,7 @@ class AccountResource extends Resource
                 Action::make('edit')
                     ->label(false)
                     ->tooltip('Editar')
-                    ->modalHeading('Editar Conta')
+                    ->modalHeading('Editar Pagamento')
                     ->modalWidth('lg')
                     ->iconButton()
                     ->icon('heroicon-o-pencil-square')
@@ -60,7 +60,7 @@ class AccountResource extends Resource
                         $record->update($data);
                         return $record;
                     }),
-                Tables\Actions\DeleteAction::make()->iconButton()->modalHeading('Excluir Conta'),
+                Tables\Actions\DeleteAction::make()->iconButton()->modalHeading('Excluir Conta')->label(false)->tooltip('Excluir'),
             ])
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([

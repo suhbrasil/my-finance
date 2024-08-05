@@ -127,12 +127,10 @@ class ReleaseResource extends Resource
                         $record->update($data);
                         return $record;
                     }),
-                Tables\Actions\DeleteAction::make()->iconButton()->modalHeading('Excluir Lançamento'),
+                Tables\Actions\DeleteAction::make()->iconButton()->modalHeading('Excluir Lançamento')->label(false)->tooltip('Excluir'),
             ])
             ->bulkActions([
-                // Tables\Actions\BulkActionGroup::make([
                 Tables\Actions\DeleteBulkAction::make(),
-                // ]),
             ]);
     }
 
