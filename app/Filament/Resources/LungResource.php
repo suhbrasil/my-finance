@@ -56,8 +56,9 @@ class LungResource extends Resource
                     ->action(function (Model $record, array $data): Model {
                         $record->update($data);
                         return $record;
-                    }),
-                Tables\Actions\DeleteAction::make()->iconButton()->modalHeading('Excluir Pulmão'),
+                    })
+                    ->hidden(fn ($record) => $record->name == 'Investimentos'),
+                Tables\Actions\DeleteAction::make()->iconButton()->modalHeading('Excluir Pulmão')->hidden(fn ($record) => $record->name == 'Investimentos'),
             ])
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([
