@@ -37,12 +37,6 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
-            // ->userMenuItems([
-            //     'profile' => MenuItem::make()
-            //         ->label('Meu Perfil')
-            //         ->icon('heroicon-o-user')
-            //         ->url(fn (): string => ViewProfile::getUrl()),
-            // ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 // Widgets\AccountWidget::class,
