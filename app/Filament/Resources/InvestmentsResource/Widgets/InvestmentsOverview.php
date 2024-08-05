@@ -15,7 +15,7 @@ class InvestmentsOverview extends BaseWidget
         $stats = [];
         $chatGrowth = [];
 
-        foreach (Release::get()->where('lung_id', 5) as $key => $release) {
+        foreach (Release::get()->where('lung_id', 1) as $key => $release) {
             $categoryName[$release->category_id] = Category::findOrFail($release->category_id)->name;
 
             $chatGrowth[$release->category_id][] = $release->value;

@@ -18,6 +18,8 @@ class LungResource extends Resource
 {
     protected static ?string $model = Lung::class;
 
+    protected static ?int $navigationSort = 3;
+
     protected static ?string $navigationIcon = 'heroicon-o-inbox-arrow-down';
 
     protected static ?string $modelLabel = 'Pulmão';

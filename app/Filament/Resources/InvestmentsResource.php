@@ -20,6 +20,8 @@ class InvestmentsResource extends Resource
 
     protected static ?string $modelLabel = 'Investimento';
 
+    protected static ?int $navigationSort = 1;
+
     protected static ?string $navigationIcon = 'heroicon-o-arrow-trending-up';
 
     // public static function form(Form $form): Form
