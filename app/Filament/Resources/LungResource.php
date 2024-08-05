@@ -20,7 +20,9 @@ class LungResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-inbox-arrow-down';
 
-    protected static ?string $modelLabel = 'Pulmões';
+    protected static ?string $modelLabel = 'Pulmão';
+
+    protected static ?string $pluralModelLabel = 'Pulmões';
 
     public static function form(Form $form): Form
     {

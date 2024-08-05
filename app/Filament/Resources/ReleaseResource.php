@@ -24,7 +24,7 @@ class ReleaseResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
 
-    protected static ?string $modelLabel = 'Lançamentos';
+    protected static ?string $modelLabel = 'Lançamento';
 
     public static function form(Form $form): Form
     {
