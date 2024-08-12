@@ -43,24 +43,24 @@ class FinancialSummary extends ApexChartWidget
         $releases = Release::select(
             DB::raw('YEAR(date) as year'),
             DB::raw('MONTH(date) as month'),
-            DB::raw('SUM(CASE WHEN value > 0 THEN value ELSE 0 END) as entrance'),
-            DB::raw('SUM(CASE WHEN value < 0 THEN ABS(value) ELSE 0 END) as exit_value')
+            DB::raw('SUM(CASE WHEN deposit = 1 THEN value ELSE 0 END) as entrance'),
+            DB::raw('SUM(CASE WHEN deposit = 0 THEN -value ELSE 0 END) as exit_value') // Note the negative sign here
         )
-        ->whereBetween('date', [$startDate, $endDate])
-        ->groupBy('year', 'month')
-        ->orderBy('year')
-        ->orderBy('month')
-        ->get();
+            ->whereBetween('date', [$startDate, $endDate])
+            ->groupBy('year', 'month')
+            ->orderBy('year')
+            ->orderBy('month')
+            ->get();
 
         $categories = [];
         $entranceData = [];
         $exitData = [];
 
         foreach ($releases as $release) {
-            $date = Carbon::createFromDate($release->year, $release->month, 1);
+            $date = Carbon::createFromDate($release->year, $release->month, 1)->locale('pt_BR');
             $categories[] = $date->format('M Y');
             $entranceData[] = round($release->entrance, 2);
-            $exitData[] = round($release->exit_value, 2);
+            $exitData[] = round($release->exit_value, 2); // This will now be a negative number
         }
 
         return [
@@ -159,8 +159,10 @@ class FinancialSummary extends ApexChartWidget
     {
         return [
             DatePicker::make('date_start')
+                ->label('Data de início')
                 ->default(now()->subYear()->startOfMonth()),
             DatePicker::make('date_end')
+                ->label('Data de fim')
                 ->default(now()->endOfMonth()),
         ];
     }
@@ -179,14 +181,14 @@ class FinancialSummary extends ApexChartWidget
             yaxis: {
                 labels: {
                     formatter: function (val, index) {
-                        return '$' + val
+                        return 'R$' + val
                     }
                 }
             },
             tooltip: {
                 x: {
                     formatter: function (val) {
-                        return val + ' /23'
+                        return val
                     }
                 }
             }
