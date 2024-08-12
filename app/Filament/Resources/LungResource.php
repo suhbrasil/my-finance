@@ -84,7 +84,6 @@ class LungResource extends Resource
         return [
             'index' => Pages\ListLungs::route('/'),
             'create' => Pages\CreateLung::route('/create'),
-            'edit' => Pages\EditLung::route('/{record}/edit'),
         ];
     }
 }
