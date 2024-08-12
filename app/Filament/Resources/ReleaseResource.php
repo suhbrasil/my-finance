@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ReleaseResource\Pages;
 use App\Models\Category;
-use App\Models\Lung;
+use App\Models\Account;
 use App\Models\Release;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Actions\Action;
@@ -21,6 +21,8 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Leandrocfe\FilamentPtbrFormFields\Money;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class ReleaseResource extends Resource
 {
@@ -36,23 +38,49 @@ class ReleaseResource extends Resource
     {
         return $form
             ->schema([
-                DatePicker::make('date')->label('Data')->required()->native(false),
-                Select::make('category_id')->label('Categoria')->required()->reactive()
-                    ->relationship('category', 'name'),
-                TextInput::make('description')->label('Descrição'),
-                Select::make('lung_id')->label('Pulmão')->required()
-                    ->relationship('lung', 'name')
+                DatePicker::make('date')
+                        ->label('Data')
+                        ->required()
+                        ->native(false),
+
+                TextInput::make('description')
+                        ->label('Descrição'),
+
+                Select::make('category_id')->label('Categoria')
+                    ->required()
+                    ->reactive()
+                    ->options(function () {
+                        return Category::where('user_id', Auth::id())->pluck('name', 'id');
+                    }),
+
+                Select::make('lung_id')
+                    ->label('Pulmão')
+                    ->required()
                     ->options(function (callable $get) {
                         $categoryId = $get('category_id');
                         if ($categoryId) {
                             $category = DB::table('categories')->where('id', $categoryId)->first();
-                            return DB::table('lungs')->where('id', $category->lung_id)->pluck('name', 'id');
+                            if ($category) {
+                                return DB::table('lungs')
+                                    ->where('id', $category->lung_id)
+                                    ->where('user_id', Auth::id()) // Filter by current user
+                                    ->pluck('name', 'id');
+                            }
                         }
                         return [];
                     }),
-                Select::make('account_id')->label('Conta de Entrada/Saída')->required()
-                    ->relationship('account', 'name'),
-                Money::make('value')->label('Valor')->required(),
+
+                Select::make('account_id')
+                    ->label('Conta de Entrada/Saída')
+                    ->required()
+                    ->options(function () {
+                        return Account::where('user_id', Auth::id())->pluck('name', 'id');
+                    }),
+
+                Money::make('value')
+                    ->label('Valor')
+                    ->required(),
+
                 Radio::make('deposit')
                     ->label('Tipo de lançamento')
                     ->boolean()
@@ -82,6 +110,11 @@ class ReleaseResource extends Resource
                         return '- R$ ' . number_format(($state), 2, ',', '.');
                     }),
             ])
+            ->modifyQueryUsing(function (Builder $query) {
+                if (Auth::user()->role === 'user') {
+                    return $query->where('user_id', Auth::id());
+                }
+            })
             ->filters([
                 //
             ])

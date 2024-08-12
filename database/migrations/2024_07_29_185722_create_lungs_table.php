@@ -15,24 +15,9 @@ return new class extends Migration
         Schema::create('lungs', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
-
-        Lung::create([
-            'name' => 'Investimentos',
-        ]);
-        Lung::create([
-            'name' => 'Entradas',
-        ]);
-        Lung::create([
-            'name' => 'Despesas Fixas',
-        ]);
-        Lung::create([
-            'name' => 'Despesas Eventuais',
-        ]);
-        Lung::create([
-            'name' => 'Lazer',
-        ]);
     }
 
     /**

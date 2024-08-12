@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 
 class Release extends Model
 {
@@ -17,8 +18,16 @@ class Release extends Model
         'lung_id',
         'account_id',
         'value',
-        'deposit'
+        'deposit',
+        'user_id',
     ];
+
+    protected static function booted()
+    {
+        static::creating(function ($release) {
+            $release->user_id = Auth::id();
+        });
+    }
 
     public function category(): BelongsTo
     {
@@ -33,5 +42,10 @@ class Release extends Model
     public function account(): BelongsTo
     {
         return $this->belongsTo(Account::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

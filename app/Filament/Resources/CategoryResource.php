@@ -13,6 +13,9 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Lung;
 
 class CategoryResource extends Resource
 {
@@ -30,7 +33,9 @@ class CategoryResource extends Resource
             ->schema([
                 TextInput::make('name')->label('Nome da categoria')->required(),
                 Select::make('lung_id')->label('Pulmão')->required()
-                    ->relationship('lung', 'name'),
+                ->options(function () {
+                    return Lung::where('user_id', Auth::id())->pluck('name', 'id');
+                }),
             ]);
     }
 
@@ -42,6 +47,11 @@ class CategoryResource extends Resource
                 TextColumn::make('lung.name')->label('Pulmão')
 
             ])
+            ->modifyQueryUsing(function (Builder $query) {
+                if (Auth::user()->role === 'user') {
+                    return $query->where('user_id', Auth::id());
+                }
+            })
             ->filters([
                 //
             ])

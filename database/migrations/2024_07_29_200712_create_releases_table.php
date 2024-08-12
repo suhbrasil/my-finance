@@ -20,6 +20,7 @@ return new class extends Migration
             $table->float('value');
             $table->date('date');
             $table->boolean('deposit');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }

@@ -14,6 +14,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class AccountResource extends Resource
 {
@@ -39,6 +40,11 @@ class AccountResource extends Resource
             ->columns([
                 TextColumn::make('name')->label('Conta de Entrada/Saída'),
             ])
+            ->modifyQueryUsing(function (Builder $query) {
+                if (Auth::user()->role === 'user') {
+                    return $query->where('user_id', Auth::id());
+                }
+            })
             ->filters([
                 //
             ])

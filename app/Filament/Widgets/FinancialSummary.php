@@ -43,8 +43,8 @@ class FinancialSummary extends ApexChartWidget
         $releases = Release::select(
             DB::raw('YEAR(date) as year'),
             DB::raw('MONTH(date) as month'),
-            DB::raw('SUM(CASE WHEN value > 0 THEN value ELSE 0 END) as entrance'),
-            DB::raw('SUM(CASE WHEN value < 0 THEN ABS(value) ELSE 0 END) as exit_value')
+            DB::raw('SUM(CASE WHEN deposit = 1 THEN value ELSE 0 END) as entrance'),
+            DB::raw('SUM(CASE WHEN deposit = 0 THEN -value ELSE 0 END) as exit_value') // Note the negative sign here
         )
         ->whereBetween('date', [$startDate, $endDate])
         ->groupBy('year', 'month')
@@ -60,7 +60,7 @@ class FinancialSummary extends ApexChartWidget
             $date = Carbon::createFromDate($release->year, $release->month, 1);
             $categories[] = $date->format('M Y');
             $entranceData[] = round($release->entrance, 2);
-            $exitData[] = round($release->exit_value, 2);
+            $exitData[] = round($release->exit_value, 2); // This will now be a negative number
         }
 
         return [
