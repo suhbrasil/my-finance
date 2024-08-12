@@ -11,6 +11,7 @@ use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
@@ -148,5 +149,10 @@ class ReleaseResource extends Resource
             'create' => Pages\CreateRelease::route('/create'),
             'edit' => Pages\EditRelease::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->where('user_id', auth()->user()->id);
     }
 }

@@ -122,7 +122,6 @@ class LungSummary extends ApexChartWidget
 
             $colors[] = $this->generateColorFromString($key);
         }
-        // dump($colors);
 
         $chart = [
             'chart' => [
@@ -175,24 +174,7 @@ class LungSummary extends ApexChartWidget
             'stroke' => [
                 'width' => 0,
             ],
-            'colors' => $colors,
-            // 'annotations' => [
-            //     'yaxis' => [
-            //         [
-            //             'y' => 7500,
-            //             'borderColor' => '#ef4444',
-            //             'borderWidth' => 1,
-            //             'label' => [
-            //                 'borderColor' => '#ef4444',
-            //                 'style' => [
-            //                     'color' => '#fffbeb',
-            //                     'background' => '#ef4444',
-            //                 ],
-            //                 'text' => 'Annotation: ' . 7500,
-            //             ],
-            //         ],
-            //     ],
-            // ],
+            'colors' => isset($colors) ? $colors : ['#d97706'],
         ];
         return $chart;
     }
