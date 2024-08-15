@@ -58,7 +58,7 @@ class FinancialSummary extends ApexChartWidget
 
         foreach ($releases as $release) {
             $date = Carbon::createFromDate($release->year, $release->month, 1)->locale('pt_BR');
-            $categories[] = $date->format('M Y');
+            $categories[] = ucfirst($date->isoFormat('MMM Y'));
             $entranceData[] = round($release->entrance, 2);
             $exitData[] = round($release->exit_value, 2); // This will now be a negative number
         }
@@ -117,6 +117,7 @@ class FinancialSummary extends ApexChartWidget
                     'style' => [
                         'fontFamily' => 'inherit',
                     ],
+                    'rotate' => 0, // Keep the labels horizontal
                 ],
                 'axisTicks' => [
                     'show' => false,
@@ -140,7 +141,7 @@ class FinancialSummary extends ApexChartWidget
                     'shade' => 'dark',
                     'type' => 'vertical',
                     'shadeIntensity' => 0.5,
-                    'gradientToColors' => ['#d97706', '#c2410c'],
+                    'gradientToColors' => ['#e879f9', '#a21caf'],
                     'opacityFrom' => 1,
                     'opacityTo' => 1,
                     'stops' => [0, 100],
@@ -148,10 +149,10 @@ class FinancialSummary extends ApexChartWidget
             ],
             'stroke' => [
                 'curve' => 'smooth',
-                'width' => 1,
+                'width' => 0,
                 'lineCap' => 'round',
             ],
-            'colors' => ['#f59e0b', '#ea580c'],
+            'colors' => ['#f0abfc', '#c026d3'],
         ];
     }
 
@@ -174,7 +175,8 @@ class FinancialSummary extends ApexChartWidget
             xaxis: {
                 labels: {
                     formatter: function (val, timestamp, opts) {
-                        return val
+                        var parts = val.split(' ');
+                    return parts[0];
                     }
                 }
             },

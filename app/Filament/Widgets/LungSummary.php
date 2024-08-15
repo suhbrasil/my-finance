@@ -9,6 +9,7 @@ use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Support\RawJs;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -22,7 +23,7 @@ class LungSummary extends ApexChartWidget
     /**
      * Widget Title
      */
-    protected static ?string $heading = 'Pulmões';
+    protected static ?string $heading = 'Gastos por Pulmão';
 
     /**
      * Sort
@@ -55,9 +56,6 @@ class LungSummary extends ApexChartWidget
      */
     protected function getMonthlySums(): array
     {
-        $startDate = Carbon::parse($this->filterFormData['date_start']);
-        $endDate = Carbon::parse($this->filterFormData['date_end']);
-
         // Get all lung_ids
         $lungIds = DB::table('releases')
             ->distinct()
@@ -69,9 +67,10 @@ class LungSummary extends ApexChartWidget
             $lungName = DB::table('lungs')->where('id', $lungId)->first()->name;
 
             $monthlyData = DB::table('releases')
-                ->select(DB::raw('MONTH(date) as month'), DB::raw('YEAR(date) as year'), DB::raw('SUM(CASE WHEN deposit THEN value ELSE -value END) as total'))
+                ->select(DB::raw('MONTH(date) as month'), DB::raw('YEAR(date) as year'), DB::raw('SUM(value) as total'))
+                ->where('deposit', false)
                 ->where('lung_id', $lungId)
-                ->whereBetween('date', [$startDate, $endDate])
+                ->whereBetween('date', [now()->startOfYear(), now()])
                 ->groupBy('year', 'month')
                 ->orderBy('year')
                 ->orderBy('month')
@@ -89,20 +88,6 @@ class LungSummary extends ApexChartWidget
         return $monthlySums;
     }
 
-    /**
-     * Filter Form
-     */
-    protected function getFormSchema(): array
-    {
-        return [
-            DatePicker::make('date_start')
-                ->label('Data de início')
-                ->default(now()->subYear()->startOfMonth()),
-            DatePicker::make('date_end')
-                ->label('Data de fim')
-                ->default(now()->endOfMonth()),
-        ];
-    }
 
     /**
      * Chart options (series, labels, types, size, animations...)
@@ -110,19 +95,18 @@ class LungSummary extends ApexChartWidget
      */
     protected function getOptions(): array
     {
-
-
         $series = [];
 
         foreach ($this->getMonthlySums() as $key => $value) {
-            $series[] = [
-                'name' => $key,
-                'data' => [$value[0], $value[1], $value[2], $value[3], $value[4], $value[5], $value[6], $value[7], $value[8], $value[9], $value[10], $value[11]],
-            ];
+            if ($key != 'Entrada') {
+                $series[] = [
+                    'name' => $key,
+                    'data' => [$value[0], $value[1], $value[2], $value[3], $value[4], $value[5], $value[6], $value[7], $value[8], $value[9], $value[10], $value[11]],
+                ];
+            }
 
             $colors[] = $this->generateColorFromString($key);
         }
-        // dump($colors);
 
         $chart = [
             'chart' => [
@@ -175,24 +159,7 @@ class LungSummary extends ApexChartWidget
             'stroke' => [
                 'width' => 0,
             ],
-            'colors' => $colors,
-            // 'annotations' => [
-            //     'yaxis' => [
-            //         [
-            //             'y' => 7500,
-            //             'borderColor' => '#ef4444',
-            //             'borderWidth' => 1,
-            //             'label' => [
-            //                 'borderColor' => '#ef4444',
-            //                 'style' => [
-            //                     'color' => '#fffbeb',
-            //                     'background' => '#ef4444',
-            //                 ],
-            //                 'text' => 'Annotation: ' . 7500,
-            //             ],
-            //         ],
-            //     ],
-            // ],
+            'colors' => isset($colors) ? $colors : ['#d97706'],
         ];
         return $chart;
     }
@@ -201,5 +168,34 @@ class LungSummary extends ApexChartWidget
     {
         // Gera um hash MD5 da string e usa os primeiros 6 caracteres como cor hexadecimal
         return '#' . substr(md5($string), 0, 6);
+    }
+
+    protected function extraJsOptions(): ?RawJs
+    {
+        return RawJs::make(<<<'JS'
+        {
+            xaxis: {
+                labels: {
+                    formatter: function (val, timestamp, opts) {
+                        return val
+                    }
+                }
+            },
+            yaxis: {
+                labels: {
+                    formatter: function (val, index) {
+                        return 'R$' + val
+                    }
+                }
+            },
+            tooltip: {
+                x: {
+                    formatter: function (val) {
+                        return val
+                    }
+                }
+            }
+        }
+    JS);
     }
 }

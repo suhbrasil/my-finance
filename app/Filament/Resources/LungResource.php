@@ -8,6 +8,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Actions\Action;
@@ -61,13 +62,13 @@ class LungResource extends Resource
                         $record->update($data);
                         return $record;
                     })
-                    ->hidden(fn ($record) => $record->name == 'Investimentos'),
+                    ->hidden(fn ($record) => $record->name == 'Investimentos' || $record->name == 'Entrada'),
                 Tables\Actions\DeleteAction::make()
                     ->label(false)
                     ->tooltip('Excluir')
                     ->iconButton()
                     ->modalHeading('Excluir Pulmão')
-                    ->hidden(fn ($record) => $record->name == 'Investimentos'),
+                    ->hidden(fn ($record) => $record->name == 'Investimentos' || $record->name == 'Entrada'),
             ])
             ->bulkActions([]);
     }
@@ -85,5 +86,10 @@ class LungResource extends Resource
             'index' => Pages\ListLungs::route('/'),
             'create' => Pages\CreateLung::route('/create'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->where('user_id', auth()->user()->id);
     }
 }

@@ -50,7 +50,7 @@ class AccountResource extends Resource
                     ->modalWidth('lg')
                     ->iconButton()
                     ->icon('heroicon-o-pencil-square')
-                    ->fillForm(fn (Model $record): array => [
+                    ->fillForm(fn(Model $record): array => [
                         'name' => $record->name,
                     ])
                     ->form([
@@ -83,5 +83,10 @@ class AccountResource extends Resource
             'create' => Pages\CreateAccount::route('/create'),
             'edit' => Pages\EditAccount::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->where('user_id', auth()->user()->id);
     }
 }
