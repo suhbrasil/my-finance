@@ -46,6 +46,7 @@ class FinancialSummary extends ApexChartWidget
             DB::raw('SUM(CASE WHEN deposit = 1 THEN value ELSE 0 END) as entrance'),
             DB::raw('SUM(CASE WHEN deposit = 0 THEN -value ELSE 0 END) as exit_value') // Note the negative sign here
         )
+            ->where('user_id', auth()->user()->id)
             ->whereBetween('date', [$startDate, $endDate])
             ->groupBy('year', 'month')
             ->orderBy('year')

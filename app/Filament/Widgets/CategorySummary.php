@@ -72,6 +72,7 @@ class CategorySummary extends ApexChartWidget
     public function getCategories()
     {
         $categoriesData = DB::table('releases')
+            ->where('user_id', auth()->user()->id)
             ->select('category_id', DB::raw("
             SUM(value) as total_value
         "))

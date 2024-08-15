@@ -36,20 +36,6 @@ class LungSummary extends ApexChartWidget
     protected static ?int $contentHeight = 275;
 
     /**
-     * Widget Footer
-     */
-    // protected function getFooter(): string | View
-    // {
-    //     $data = [
-    //         'new' => 230,
-    //         'delivered' => 890,
-    //         'cancelled' => 54,
-    //     ];
-
-    //     return view('charts.order-status.footer', ['data' => $data]);
-    // }
-
-    /**
      * Fetch and sum values for each month of the year for all lung_ids.
      *
      * @return array
@@ -58,6 +44,7 @@ class LungSummary extends ApexChartWidget
     {
         // Get all lung_ids
         $lungIds = DB::table('releases')
+            ->where('user_id', auth()->user()->id)
             ->distinct()
             ->pluck('lung_id');
 
@@ -68,6 +55,7 @@ class LungSummary extends ApexChartWidget
 
             $monthlyData = DB::table('releases')
                 ->select(DB::raw('MONTH(date) as month'), DB::raw('YEAR(date) as year'), DB::raw('SUM(value) as total'))
+                ->where('user_id', auth()->user()->id)
                 ->where('deposit', false)
                 ->where('lung_id', $lungId)
                 ->whereBetween('date', [now()->startOfYear(), now()])

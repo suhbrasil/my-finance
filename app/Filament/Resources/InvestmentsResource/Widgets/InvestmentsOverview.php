@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Release;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Database\Eloquent\Builder;
 
 class InvestmentsOverview extends BaseWidget
 {
@@ -15,8 +16,9 @@ class InvestmentsOverview extends BaseWidget
         $data = [];
         $stats = [];
         $chatGrowth = [];
+        $releases = Release::get()->where('lung_id', 1)->where('user_id', auth()->user()->id);
 
-        foreach (Release::get()->where('lung_id', 1) as $key => $release) {
+        foreach ($releases as $key => $release) {
             $categoryName[$release->category_id] = Category::findOrFail($release->category_id)->name;
 
             if ($release->deposit)
