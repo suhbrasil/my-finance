@@ -3,8 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ReleaseResource\Pages;
-use App\Models\Category;
-use App\Models\Lung;
 use App\Models\Release;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Actions\Action;
@@ -13,13 +11,14 @@ use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Illuminate\Support\Facades\DB;
-use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\Summarizers\Sum;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Leandrocfe\FilamentPtbrFormFields\Money;
 
@@ -71,21 +70,28 @@ class ReleaseResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('date')->label('Data')->dateTime('d/m/Y'),
-                TextColumn::make('category.name')->label('Categoria'),
-                TextColumn::make('description')->label('Descrição'),
-                TextColumn::make('lung.name')->label('Pulmão'),
-                TextColumn::make('account.name')->label('Conta'),
+                TextColumn::make('date')->label('Data')->dateTime('d/m/Y')->searchable()->sortable(),
+                TextColumn::make('category.name')->label('Categoria')->searchable(),
+                TextColumn::make('description')->label('Descrição')->searchable(),
+                TextColumn::make('lung.name')->label('Pulmão')->searchable(),
+                TextColumn::make('account.name')->label('Conta')->searchable(),
                 TextColumn::make('value')->label('Valor')
+                    // ->summarize(Sum::make()->query(fn(QueryBuilder $query) => $query->where('deposit', false))->money('BRl'))
                     ->formatStateUsing(function (string $state, $record) {
                         if ($record->deposit)
                             return 'R$ ' . number_format(($state), 2, ',', '.');
                         return '- R$ ' . number_format(($state), 2, ',', '.');
-                    }),
+                    })->searchable(),
             ])
-            ->filters([
-                //
+            ->groups([
+                Group::make('lung.name')
+                    ->label('Pulmão')
+                    ->collapsible()
+                    ->titlePrefixedWithLabel(false),
             ])
+            ->defaultGroup('lung.name')
+            ->groupingSettingsHidden()
+            ->filters([])
             ->actions([
                 Action::make('edit')
                     ->label(false)
@@ -94,7 +100,7 @@ class ReleaseResource extends Resource
                     ->modalWidth('2xl')
                     ->iconButton()
                     ->icon('heroicon-o-pencil-square')
-                    ->fillForm(fn (Model $record): array => [
+                    ->fillForm(fn(Model $record): array => [
                         'date' => $record->date,
                         'category_id' => $record->category_id,
                         'description' => $record->description,

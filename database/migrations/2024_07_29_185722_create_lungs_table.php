@@ -19,22 +19,6 @@ return new class extends Migration
             $table->foreignIdFor(User::class)->nullable();
             $table->timestamps();
         });
-
-        Lung::create([
-            'name' => 'Investimentos',
-        ]);
-        Lung::create([
-            'name' => 'Entradas',
-        ]);
-        Lung::create([
-            'name' => 'Despesas Fixas',
-        ]);
-        Lung::create([
-            'name' => 'Despesas Eventuais',
-        ]);
-        Lung::create([
-            'name' => 'Lazer',
-        ]);
     }
 
     /**
