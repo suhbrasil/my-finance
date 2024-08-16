@@ -39,7 +39,7 @@ class LungResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->label('Pulmão')
+                TextColumn::make('name')->label('Pulmão')->searchable()->sortable()
             ])
             ->filters([
                 //

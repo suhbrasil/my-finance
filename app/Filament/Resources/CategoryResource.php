@@ -39,8 +39,8 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->label('Categoria'),
-                TextColumn::make('lung.name')->label('Pulmão')
+                TextColumn::make('name')->label('Categoria')->searchable()->sortable(),
+                TextColumn::make('lung.name')->label('Pulmão')->searchable()->sortable()
 
             ])
             ->filters([
@@ -70,9 +70,6 @@ class CategoryResource extends Resource
                 Tables\Actions\DeleteAction::make()->iconButton()->modalHeading('Excluir Categoria')->label(false)->tooltip('Excluir'),
             ])
             ->bulkActions([
-                // Tables\Actions\BulkActionGroup::make([
-                //     Tables\Actions\DeleteBulkAction::make(),
-                // ]),
             ]);
     }
 

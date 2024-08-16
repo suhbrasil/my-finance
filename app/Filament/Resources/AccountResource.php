@@ -37,7 +37,7 @@ class AccountResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->label('Conta de Entrada/Saída'),
+                TextColumn::make('name')->label('Conta de Entrada/Saída')->searchable()->sortable(),
             ])
             ->filters([
                 //
