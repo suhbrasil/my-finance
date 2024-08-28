@@ -5,7 +5,8 @@ The financial management system My Finance came with the aim of assisting in the
 
 Through a responsive interface, the system allows you to register your inputs and outputs, view your expenses by lungs or by category, your inputs and outputs by period and also has an investment visualization panel.
 
-![image](https://github.com/user-attachments/assets/1fefddf2-2a72-4864-9c68-a685530641e6)
+![2912E456-C41C-4121-BAE6-C689E7A1C566_1_201_a](https://github.com/user-attachments/assets/a9688f3a-7846-41c3-b362-091b8e72ec69)
+
 
 ## **Installation**
 
@@ -41,4 +42,4 @@ Thank you to all the contributors for their hard work and dedication to the proj
 
 ## **Contact**
 
-If you have any questions or comments about Project Title, please contact **[Suzana Pachelle](suzi.pachelle@gmail.com)**.
+If you have any questions or comments about Project Title, please contact **[Suzana Pachelle](mailto:suzi.pachelle@gmail.com)**.
