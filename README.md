@@ -5,7 +5,8 @@ The financial management system My Finance came with the aim of assisting in the
 
 Through a responsive interface, the system allows you to register your inputs and outputs, view your expenses by lungs or by category, your inputs and outputs by period and also has an investment visualization panel.
 
-![2912E456-C41C-4121-BAE6-C689E7A1C566_2_0_a](https://github.com/user-attachments/assets/e572af9d-4059-4c0a-95e2-c15eaaa4fe48)
+[![Watch the video](https://img.youtube.com/vi/cJ8X5xNOCa4/maxresdefault.jpg)](https://youtu.be/cJ8X5xNOCa4?si=vUG6Dwys0qsE_KPG)
+
 
 
 ## **Installation**
@@ -15,6 +16,7 @@ To install My Finance, follow these steps:
 1. Clone the repository: **`git clone https://github.com/suhbrasil/my-finance`**
 2. Navigate to the project directory: **`cd my-finance`**
 3. Install dependencies: **`npm install`**
+
 4. Build the project: **`npm run build`**
 5. Start the project: **`npm start`**
 
