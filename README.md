@@ -13,7 +13,7 @@ Through a responsive interface, the system allows you to register your inputs an
 
 To install My Finance, follow these steps:
 
-1. Clone the repository: **`git clone https://github.com/suhbrasil/my-finance`**
+1. Clone the repository: **`git clone https://github.com/suhbrasil/my-finance.git`**
 2. Navigate to the project directory: **`cd my-finance`**
 3. Install dependencies: **`npm install`**
 
@@ -24,13 +24,12 @@ To install My Finance, follow these steps:
 
 To use My Finance, follow these steps after:
 
-1. Start the project: **`php artisan serve`**
-2. Create a new user.
-3. Create the payment methods, in **`Payments`**, that you use most. for example Credit Card, Food Voucher, among others.
-4. Create lungs in **`Lungs`** to record your expenses. For example: Leisure, Fixed Expenses, among others. The investment buffer and entry are created by default and cannot be deleted or changed.
-5. Create the categories in **`Categories`** that will be associated with each lung.
-6. Now you can register your releases in **`Releases`**.
-7. You can see a dashboard with your expenses and entries in the **`Control Panel`** and your investments in **`Investments`**.
+1. Create a new user.
+2. Create the payment methods, in **`Payments`**, that you use most. for example Credit Card, Food Voucher, among others.
+3. Create lungs in **`Lungs`** to record your expenses. For example: Leisure, Fixed Expenses, among others. The investment buffer and entry are created by default and cannot be deleted or changed.
+4. Create the categories in **`Categories`** that will be associated with each lung.
+5. Now you can register your releases in **`Releases`**.
+6. You can see a dashboard with your expenses and entries in the **`Control Panel`** and your investments in **`Investments`**.
 
 ## **Authors and Acknowledgment**
 
