@@ -10,7 +10,7 @@ Through a responsive interface, the system allows you to register your inputs an
 
 ## **Installation**
 
-To install Project Title, follow these steps:
+To install My Finance, follow these steps:
 
 1. Clone the repository: **`git clone https://github.com/suhbrasil/my-finance`**
 2. Navigate to the project directory: **`cd my-finance`**
@@ -32,7 +32,7 @@ To use My Finance, follow these steps after:
 
 ## **Authors and Acknowledgment**
 
-Project Title was created by **[Suzana Pachelle](https://github.com/suhbrasil)**.
+My Finance was created by **[Suzana Pachelle](https://github.com/suhbrasil)**.
 
 Additional contributors include:
 
@@ -42,4 +42,4 @@ Thank you to all the contributors for their hard work and dedication to the proj
 
 ## **Contact**
 
-If you have any questions or comments about Project Title, please contact **[Suzana Pachelle](mailto:suzi.pachelle@gmail.com)**.
+If you have any questions or comments about My Finance, please contact **[Suzana Pachelle](mailto:suzi.pachelle@gmail.com)**.
