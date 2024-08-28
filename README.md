@@ -1,10 +1,11 @@
-![image](https://github.com/user-attachments/assets/1fefddf2-2a72-4864-9c68-a685530641e6)# **Example README File**
 
 ## **My Finance**
 
 The financial management system My Finance came with the aim of assisting in the registration and control of expenses.
 
 Through a responsive interface, the system allows you to register your inputs and outputs, view your expenses by lungs or by category, your inputs and outputs by period and also has an investment visualization panel.
+
+![image](https://github.com/user-attachments/assets/1fefddf2-2a72-4864-9c68-a685530641e6)
 
 ## **Installation**
 
